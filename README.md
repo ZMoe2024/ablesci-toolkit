@@ -2,7 +2,7 @@
 
 科研通的独立 Python HTTP 工具：签到、本人求助文件下载、单篇应助上传，以及普通下载线路诊断。
 
-运行环境：**Windows、Python 3.11+**。登录态使用当前 Windows 用户的 DPAPI 加密保存。日常运行不依赖 Codex；ScienceDirect 下载器是可选的独立组件，不包含在此仓库。
+运行环境：**Windows、Python 3.11+**。登录态使用当前 Windows 用户的 DPAPI 加密保存。日常运行不依赖 Codex；文献获取可选接入 ScanSci PDF。
 
 ## 已实现
 
@@ -11,6 +11,7 @@
 | 签到和入账核对 | `checkin.py` | 支持，重复签到会跳过 |
 | 等待应助、普通线路下载PDF | `assist_download.py` | 已完成真实下载验证 |
 | 单篇PDF应助 | `assist_give.py` | 已完成两篇真实OSS上传验证；是否采纳由求助者决定 |
+| DOI / arXiv 文献获取 | `scansci.cmd` | 调用可选依赖 ScanSci PDF；下载后交给应助脚本 |
 | 节点负载、Range诊断 | `diagnose_routes.py` | 支持普通节点小流量探测 |
 | 多源分片实验 | `multisource_probe.py` | 192 KiB样本并发与缺片恢复已验证；不是完整多源下载器 |
 | 自动发布求助 | [接口文档](docs/api.md) | 接口已实测，尚无通用发布CLI |
@@ -86,9 +87,36 @@ python assist_give.py --assist-id REQUEST_ID --file C:\papers\article.pdf --subm
 
 每个求助保存 `give-REQUEST_ID.json` 回执。提交结果不明时阻止盲目重发，应先核对站内状态；验证码需要人工处理。上传成功不代表已经被采纳或积分到账。当前没有后台自动刷列表/批量应助服务。
 
-## 可选：ScienceDirect下载衔接
+## 可选：ScanSci PDF 文献下载
 
-本工具接收本地PDF。若另行安装了ScienceDirect下载器，可用官方文章URL/PII下载，再把已成功保存的PDF路径交给`assist_give.py`。[请求示例](examples/sciencedirect-request.json)仅描述对接格式；本仓库不分发该下载器、浏览器扩展、机构登录态或论文。
+接入的上游项目是 [Rimagination/scansci-pdf](https://github.com/Rimagination/scansci-pdf)，通过 PyPI 安装，版本固定为 `1.17.0`。本仓库提供安装入口和命令入口，不复制上游源码或浏览器数据。上游 GitHub 源码采用 Apache-2.0；其 PyPI 编译组件另有说明，见[上游许可证说明](https://github.com/Rimagination/scansci-pdf#许可证)。
+
+完成前面的虚拟环境创建后执行：
+
+```powershell
+.\install-scansci.cmd
+.\scansci.cmd --help
+```
+
+也可以直接安装：`python -m pip install -r requirements-scansci.txt`。`scansci.cmd` 与其他快捷入口使用同一 Python 环境，并将参数原样传给上游 CLI。
+
+```powershell
+# DOI / arXiv 下载，文件放进已被 Git 忽略的 downloads
+.\scansci.cmd get 10.1038/nature12373 --strategy legal_only --output .\downloads
+
+# 机构下载流程，输出 JSON 结果，方便 AI 查看实际状态和路径
+.\scansci.cmd fetch 10.1038/nature12373 --output .\downloads --format json
+
+# 拿到真实文件路径后，先核对，再明确提交应助
+python assist_give.py --assist-id REQUEST_ID --file "C:\papers\downloaded.pdf"
+python assist_give.py --assist-id REQUEST_ID --file "C:\papers\downloaded.pdf" --submit
+```
+
+上游失败时不一定返回非零退出码，应检查结果中的成功状态、实际 PDF 路径以及文件内容。下载入口不会自动调用应助上传；上传仍由 `assist_give.py --submit` 控制。文献能否下载取决于来源可用性和已有访问权限。
+
+如需上游的可见浏览器和机构登录功能，可在同一环境安装 `python -m pip install "scansci-pdf[cloakbrowser,instsci]==1.17.0"`，再按[上游说明](https://github.com/Rimagination/scansci-pdf)配置。首次浏览器使用可能还需下载运行时。API Key、机构登录和浏览器资料仅保存在本机；本发布包不携带这些配置。
+
+发布验证覆盖安装、CLI 参数和本工具回归测试，未声称已完成 ScanSci PDF 的真实论文下载验证。
 
 ## 线路与分片实验
 

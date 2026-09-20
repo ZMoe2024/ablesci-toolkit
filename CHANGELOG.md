@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+- Add optional ScanSci PDF 1.17.0 installation and CLI launchers.
+- Document the download-to-assistance workflow and upstream dependency attribution.
+- Remove the separate ScienceDirect downloader example and integration instructions.
+
 ## 0.1.0
 
 - Initial standalone Windows release: HTTP check-in, own-request PDF download, and single-PDF assistance upload.
