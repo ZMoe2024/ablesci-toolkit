@@ -2,7 +2,7 @@
 
 科研通的独立 Python HTTP 工具：签到、本人求助文件下载、单篇应助上传，以及普通下载线路诊断。
 
-**[加入科研 AI 社区 →](https://skill.createsci.com/community)** · 交流科研工具、AI 用法与文献获取经验。
+[![加入科研 AI 社区：交流工具、分享经验、一起解决问题](assets/community-banner.png)](https://skill.createsci.com/community)
 
 运行环境：**Windows、Python 3.11+**。登录态使用当前 Windows 用户的 DPAPI 加密保存。日常运行不依赖 Codex；文献获取可选接入 ScanSci PDF。
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Add a clickable illustrated community banner at the top of the README.
+
 ## 0.1.2
 
 - Add a prominent community link and a standalone Windows launcher for the research AI community application page.
