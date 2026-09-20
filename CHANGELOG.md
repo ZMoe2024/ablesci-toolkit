@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Add a prominent community link and a standalone Windows launcher for the research AI community application page.
+- Support `join-community.cmd --url` for terminal and agent use without opening a browser.
+
 ## 0.1.1
 
 - Add optional ScanSci PDF 1.17.0 installation and CLI launchers.

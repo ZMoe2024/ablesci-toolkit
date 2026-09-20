@@ -2,6 +2,8 @@
 
 科研通的独立 Python HTTP 工具：签到、本人求助文件下载、单篇应助上传，以及普通下载线路诊断。
 
+**[加入科研 AI 社区 →](https://skill.createsci.com/community)** · 交流科研工具、AI 用法与文献获取经验。
+
 运行环境：**Windows、Python 3.11+**。登录态使用当前 Windows 用户的 DPAPI 加密保存。日常运行不依赖 Codex；文献获取可选接入 ScanSci PDF。
 
 ## 已实现
@@ -15,8 +17,21 @@
 | 节点负载、Range诊断 | `diagnose_routes.py` | 支持普通节点小流量探测 |
 | 多源分片实验 | `multisource_probe.py` | 192 KiB样本并发与缺片恢复已验证；不是完整多源下载器 |
 | 自动发布求助 | [接口文档](docs/api.md) | 接口已实测，尚无通用发布CLI |
+| 加入科研 AI 社区 | `join-community.cmd` | 用默认浏览器打开社区申请页面 |
 
 当前下载入口固定普通通道，不会自动扣积分使用高速通道。下载文件仍需标题、DOI等核验；匹配失败会返回 `needs_review`。普通下载CLI尚未加入自动切线、断点续传和VIP/CDN。
+
+## 加入社区
+
+欢迎交流科研工具的实际用法、问题和经验。点击 **[加入社区](https://skill.createsci.com/community)**，或双击 `join-community.cmd`，即可用默认浏览器打开社区页面，无需安装 Python 或登录科研通。
+
+```powershell
+.\join-community.cmd
+# 只显示链接，供终端或 AI 助手使用
+.\join-community.cmd --url
+```
+
+完成页面上的三道入门题后，按提示联系 Moe 申请加入，审核通过后邀请入群。入口不提交科研通账号、Cookie 或文献记录。
 
 ## 安装
 
